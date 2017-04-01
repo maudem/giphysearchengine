@@ -8,7 +8,7 @@ $(document).ready(function (){
 		var show = $(this).attr("data-info");
 
 		//url to search for the tv show that was clicked
-		var queryURL = "http://api.giphy.com/v1/gifs/search?q="+show+"api_key=dc6zaTOxFJmzC&limit=10&callback=";
+		var queryURL = "https://api.giphy.com/v1/gifs/search?q="+show+"api_key=dc6zaTOxFJmzC&limit=10&callback=";
 
 		//----ajax call for pressed button---
 		$.ajax({
