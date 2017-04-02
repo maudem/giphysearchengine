@@ -1,15 +1,14 @@
 $(document).ready(function (){
 	//----initial TV show array
-	var tv = ["New Girl", "Game of Thrones", "Sesame Street"];
+	var topics =["New Girl", "Game of Thrones", "Sesame Street"];
 
 	//----*FUNCTION* that displays gifs----
-	function showGIF() {
+	function showGIF(show) {
 
-		var show = $(this).attr("data-info");
+		// var show = $(this).data("info");
 
 		//url to search for the tv show that was clicked
-		var queryURL = "https://api.giphy.com/v1/gifs/search?q="+show+"api_key=dc6zaTOxFJmzC&limit=10&callback=";
-
+		var queryURL = "https://api.giphy.com/v1/gifs/search?q="+show+"&limit=12&api_key=dc6zaTOxFJmzC";
 		//----ajax call for pressed button---
 		$.ajax({
 			url: queryURL,
@@ -28,7 +27,30 @@ $(document).ready(function (){
 				var ratingHTML = $("<p>").text("Rating: " + ratingDiv);
 				//image tag
 				var showImg = $("<img>");
+				// //returns stills
+				// showImg.attr("src", results[i].images.fixed_height_still.url);
 				showImg.attr("src", results[i].images.fixed_height.url);
+			
+
+				// $(<"img">).on("click", function() {
+				// 	return showImg.attr("src", results[i].images.fixed_height.url);
+    //     			}
+    
+    // 			var animate = showImg.attr("src", results[i].images.fixed_height.url);
+				// var still = showImg.attr("src", results[i].images.fixed_height_still.url);
+				
+    // 			 $("<img>").hover(
+    //    				 function()
+    //    					 {
+    
+    //      					 $(this).attr("src", src.replace(still, animate));
+    //    						 },
+    //     			function()
+    //     				{
+      
+    //       			$(this).attr("src", src.replace(animate, still));
+    //     			});
+
 				//---adding rating to the html----
 				gifDiv.append(ratingHTML);
 				gifDiv.append(showImg);
@@ -40,16 +62,17 @@ $(document).ready(function (){
 
 //---*FUNCTION* getting buttons ----
 function getButton() {
-	//--- delete old info to avoid repeat.prepend	$("#tv-btns").empty(); 
+	//--- delete old info to avoid repeat.prepend
+	$("#tv-btns").empty(); 
 	//--- loop for making the tv buttons---->
-	for (var i =0; i <tv.length; i++) {
+	for (var i =0; i <topics.length; i++) {
 		var a = $("<button>");
 		//adding a class to the button
 		a.addClass("gif");
 		// adding data attribute (idk y that's important)
-		a.attr("data-info", tv[i]);
+		a.attr("data-info", topics[i]);
 		//text inside button
-		a.text(tv[i]);
+		a.text(topics[i]);
 		//put the button in its place on the page
 		$("#tv-btns").append(a);
 	}
@@ -61,19 +84,29 @@ $("#getShow").on("click", function(event) {
 	event.preventDefault();   //keeps button from resetting
 	//stores user input
 	var show = $("#tv-input").val().trim();
+
+	// gives an alert if tv-input is blank when pressed
+	if (show == "") {
+		alert("If you want to add a show, don't leave this blank");
+		return false;
+	} else{
 	// adding new show to array
-	tv.push(show);
+	topics.push(show);
+	}
 	//calling function to display new button
+
 	getButton();
 
-});
+}); //getShow onclick end
 
 
 
-$("#tv-btns").on("click", function(event) {
+$("#tv-btns").on("click", ".gif" ,function() {
 	event.preventDefault();
-
-	showGIF();
+	$("#results").empty();
+		// i'm trying to attach the dynamic child, .gif to static parent tv-btns
+	var show= $(this).data("info");
+	showGIF(show);
 
 });
 
